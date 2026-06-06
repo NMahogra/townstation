@@ -15,4 +15,8 @@ class Sale extends Model
         'quantity',
         'total_price',
     ];
+    public function book()
+    {
+        return $this->belongsTo(Book::class);
+    }
 }
