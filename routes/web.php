@@ -5,4 +5,4 @@ use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('books', BookController::class); //resource controller untuks ales
-Route::get('/sales', [SaleController::class, 'index'])->name('sales.index'); //menampilkan data penjualan dengan sorting
+Route::resource('sales', SaleController::class);
