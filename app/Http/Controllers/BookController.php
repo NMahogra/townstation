@@ -4,24 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use Inertia\Inertia;
 
 class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index() //menampilkan semua data buku
-    {
-        $books = Book::all();
-        return view('books.index', compact('books'));
-    }
+    public function index()
+{
+    $books = Book::all();
+
+    return Inertia::render('Books/Index', [
+        'books' => $books
+    ]);
+}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create() //memanggil method create untuk menampilkan form tambah buku
     {
-        return view('books.create');
+       return Inertia::render('Books/Create');
     }
 
     /**
@@ -29,12 +33,19 @@ class BookController extends Controller
      */
     public function store(Request $request) //menyimpan data buku yang baru dibuat ke database
     {
-        Book::create([
-             'title' => $request -> title,
-            'author' => $request -> author,
-            'price' => $request -> price
-        ]);
-        return redirect()->route('books.index');
+        $request->validate([
+    'title' => 'required',
+    'author' => 'required',
+    'price' => 'required|numeric'
+]);
+
+Book::create($request->only([
+    'title',
+    'author',
+    'price'
+]));
+
+return redirect()->route('books.index');
     }
 
     /**
@@ -42,7 +53,9 @@ class BookController extends Controller
      */
     public function show(Book $book) //menampilkan detail data buku yang dipilih
     {
-        return view('books.show', compact('book'));
+        return Inertia::render('Books/Show', [
+    'book' => $book
+]);
     }
 
     /**
@@ -50,7 +63,9 @@ class BookController extends Controller
      */
     public function edit(Book $book) //menampilkan form edit buku dengan data buku yang akan diedit
     {
-        return view('books.edit', compact('book'));
+        return Inertia::render('Books/Edit', [
+    'book' => $book
+]);
     }
 
     /**
@@ -58,13 +73,19 @@ class BookController extends Controller
      */
     public function update(Request $request,Book $book) //mengupdate data buku yang sudah diedit ke database
     {
-        $book ->update([
-        'title' => $request->title,
-        'author' => $request->author,
-        'price' => $request->price
-    ]);
+        $request->validate([
+    'title' => 'required',
+    'author' => 'required',
+    'price' => 'required|numeric'
+]);
 
-    return redirect()->route('books.index'); //mengembalikan ke halaman index setelah update data buku
+$book->update($request->only([
+    'title',
+    'author',
+    'price'
+]));
+
+return redirect()->route('books.index');//mengembalikan ke halaman index setelah update data buku
     }
 
     /**
