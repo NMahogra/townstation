@@ -18,7 +18,7 @@ class SaleController extends Controller
       $sort = $request->get('sort', 'desc');
 
     $sales = Sale::with('book') 
-                ->orderBy('quantity', $sort)
+                ->orderBy('total_price', $sort)
                 ->get();
 
     return response()->json($sales);   // balikin data json berupa sales sesuai filter asc or desc 
