@@ -10,3 +10,6 @@ Route::get('/sales', [SaleController::class, 'index'])->name('sales.index'); //m
 Route::get ('/api-books',  function () { //route untuk menampilkan data buku dengan API
     return Inertia::render('ApiBooks/Index'); //menampilkan data buku dengan API
 }); 
+Route::get('/sales/data', [SaleController::class, 'getData'])
+    ->name('sales.data');
+Route::resource('sales', SaleController::class);
